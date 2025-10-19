@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Món Quà 20/10 Tặng Em Yêu 💌</title>
+    <style>
+        /* --- CSS NỀN VÀ TRANG TRÍ --- */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: linear-gradient(to right top, #f3e9f3, #ffe0f0, #f8c8d8);
+            color: #4a148c;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            opacity: 0; 
+            transition: opacity 2s;
+        }
+
+        h1 {
+            color: #880e4f;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px #f48fb1;
+            margin-bottom: 20px;
+        }
+
+        /* --- PHẦN HỎI NHẠC (ĐÃ KHÔI PHỤC) --- */
+        #music-question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px dashed #f06292;
+            border-radius: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #btn-yes { background-color: #f48fb1; color: white; }
+        #btn-yes:hover { background-color: #ec407a; }
+        #btn-no { background-color: #e1bee7; color: #4a148c; }
+        #btn-no:hover { background-color: #ce93d8; }
+
+        #content { display: none; }
+
+        /* Khung chữ nhật cho thư */
+        #letter-box {
+            background-color: #fff9e6;
+            border: 1px solid #ffcc80;
+            padding: 25px;
+            text-align: left;
+            border-radius: 10px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+            white-space: pre-wrap;
+            min-height: 250px;
+            margin-top: 20px;
+        }
+
+        /* --- HIỆU ỨNG TRÌNH CHIẾU ẢNH (SLIDESHOW) --- */
+        #photo-frame {
+            width: 90%;
+            max-width: 450px;
+            height: 300px;
+            border: 5px solid #e91e63;
+            margin: 30px auto;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 0 15px rgba(233, 30, 99, 0.7);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; 
+        }
+        
+        .slide-image.active {
+            opacity: 1;
+        }
+        
+        /* --- BÓNG BAY VÀ BÁNH KEM --- */
+        .balloon {
+            width: 40px; height: 50px; background: #ff80ab;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: absolute; bottom: -100px; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2);
+            opacity: 0; animation: float 10s ease-in-out infinite; z-index: 10;
+        }
+        .balloon::before {
+            content: ''; position: absolute; bottom: -10px; left: 50%;
+            transform: translateX(-50%); width: 0; height: 0; border-style: solid;
+            border-width: 0 5px 10px 5px; border-color: transparent transparent var(--balloon-color) transparent;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(-120vh); opacity: 0; }
+        }
+
+        /* Bánh kem CSS Art */
+        #cake {
+            margin: 40px auto 20px; display: none; width: 250px; height: 200px; position: relative;
+        }
+        .layer { position: absolute; width: 100%; border-radius: 50%; }
+        .bottom { height: 80px; background: #f8c8d8; top: 120px; box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2); }
+        .middle { height: 60px; background: #ffe0f0; top: 60px; z-index: 1; }
+        .top { height: 40px; background: #ffcc80; top: 20px; z-index: 2; }
+        .icing { height: 20px; background: #ffffff; top: 10px; z-index: 3; border-radius: 50%; }
+        .candle { position: absolute; width: 5px; height: 20px; background: #f44336; top: -10px; left: 50%; transform: translateX(-50%); z-index: 4; border-radius: 2px; }
+        .flame { position: absolute; width: 6px; height: 8px; background: orange; border-radius: 50%; top: -18px; left: 50%; transform: translateX(-50%); z-index: 5; box-shadow: 0 0 5px yellow; }
+        .message { position: absolute; top: 60px; width: 100%; text-align: center; font-weight: bold; color: #880e4f; font-size: 0.8em; z-index: 5; }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" loop>
+        <source src="chill.mp3" type="audio/mp3">
+        Trình duyệt của bạn không hỗ trợ audio.
+    </audio>
+
+    <div id="music-question">
+        <h2>💖 Em yêu ơi, anh có thể bật một bản nhạc nhẹ nhàng không? 💖</h2>
+        <button id="btn-yes" class="btn">Yes! 🎶</button>
+        <button id="btn-no" class="btn">No🤫</button>
+    </div>
+    <div id="container">
+        <h1 id="main-title">💌 CHÚC MỪNG NGÀY PHỤ NỮ VIỆT NAM 20 THÁNG 10 💌</h1>
+        
+        <div id="content">
+            <h2 style="color: #6a1b9a;">1: Lời Giới Thiệu</h2>
+            <p id="intro-text" style="font-style: italic; font-size: 1.1em;"></p>
+            
+            <h2 style="color: #6a1b9a;">2: Bức Thư Anh Viết Tặng Em😘</h2>
+            <div id="letter-box">
+                <p id="typing-letter">Đang soạn thư tình...</p>
+            </div>
+            
+            <h2 id="final-step" style="color: #6a1b9a; margin-top: 30px; display: none;">3: Món Quà Bất Ngờ!</h2>
+
+            <div id="photo-frame">
+                <p id="slideshow-message" style="line-height: 300px; color: #d81b60; font-weight: bold; margin: 0;">Đang tải ảnh...</p>
+            </div>
+            
+            <div id="balloon-area" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+            </div>
+
+            <div id="cake">
+                <div class="candle"><div class="flame"></div></div>
+                <div class="icing"></div>
+                <div class="top layer"><div class="message">HAPPY 20/10</div></div>
+                <div class="middle layer"></div>
+                <div class="bottom layer"></div>
+            </div>
+
+            <p id="closing-message" style="font-size: 1.2em; font-weight: bold; margin-top: 30px; display: none; color: #880e4f;">
+                Anh yêu em rất nhiều! Chúc em ngày 20/10 thật hạnh phúc! ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // *** DANH SÁCH ẢNH CỦA BẠN (CẬP NHẬT TÊN ẢNH VÀO ĐÂY) ***
+        // Đảm bảo các file này nằm trong thư mục img/
+        const photoList = [
+            "1.jpeg", 
+            "2.jpeg", 
+            "3.jpeg", 
+            "4.jpeg",
+            // Thêm các tên file ảnh khác của bạn vào đây
+        ];
+
+        // Nội dung thư
+        const letterContent = `
+Gửi em, cô gái anh yêu nhất!
+
+Ngày 20/10 lại đến rồi, một ngày thật đặc biệt để tôn vinh những người phụ nữ tuyệt vời như em. Anh muốn gửi đến em tất cả những lời chúc tốt đẹp nhất.
+
+Cảm ơn em đã bước vào cuộc đời anh, mang theo ánh nắng, tiếng cười và sự ấm áp. Mỗi khoảnh khắc bên em đều là những kỷ niệm vô giá mà anh sẽ luôn trân trọng.
+
+Chúc em luôn xinh đẹp, rạng rỡ, tự tin và đạt được mọi điều em mong muốn trong cuộc sống. 
+Dù có bất cứ chuyện gì xảy ra, hãy nhớ rằng luôn có một người ở đây, yêu thương, ủng hộ và tin tưởng em vô điều kiện.
+
+Yêu em nhiều lắm!
+
+Minh Vũ ♥️Loannnn Rất Nhiềuuuuu
+(P/s: Anh mong em thích món quà nhỏ này!)
+`;
+
+        const music = document.getElementById('bg-music');
+        const container = document.getElementById('container');
+        const content = document.getElementById('content');
+        const introText = document.getElementById('intro-text');
+        const typingLetter = document.getElementById('typing-letter');
+        const finalStep = document.getElementById('final-step');
+        const photoFrame = document.getElementById('photo-frame');
+        const slideshowMessage = document.getElementById('slideshow-message');
+        const cakeElement = document.getElementById('cake');
+        const closingMessage = document.getElementById('closing-message');
+        const musicQuestion = document.getElementById('music-question');
+        const balloonArea = document.getElementById('balloon-area');
+
+        let slideshowInterval;
+        let resolveSlideshow; // Biến lưu hàm resolve của Promise
+
+        // Hàm gõ chữ tự động
+        function typeWriter(text, element, speed) {
+            let i = 0;
+            return new Promise(resolve => {
+                function typing() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typing, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+                typing();
+            });
+        }
+
+        // --- HÀM TRÌNH CHIẾU ẢNH (SLIDESHOW) ---
+        function startSlideshow(durationPerPhoto = 2500) { // 2.5 giây/ảnh
+            
+            slideshowMessage.style.display = 'none';
+
+            // Tạo các thẻ <img>
+            photoList.forEach(photoName => {
+                const img = document.createElement('img');
+                img.src = `img/${photoName}`; 
+                img.alt = "Ảnh kỷ niệm";
+                img.className = 'slide-image';
+                
+                img.onerror = () => {
+                    console.error(`Không tải được ảnh: img/${photoName}`);
+                    img.style.opacity = 0; 
+                };
+
+                photoFrame.appendChild(img);
+            });
+
+            const slides = document.querySelectorAll('.slide-image');
+            if (slides.length === 0 || photoList.length === 0) {
+                photoFrame.innerHTML = "<p style='line-height: 300px; color: red;'>Lỗi: Không tìm thấy ảnh nào! Vui lòng kiểm tra mảng photoList.</p>";
+                return new Promise(resolve => setTimeout(resolve, 3000));
+            }
+
+            let slideIndex = 0;
+
+            function showSlides() {
+                // Nếu đã chiếu hết ảnh
+                if (slideIndex >= slides.length) {
+                    clearInterval(slideshowInterval); 
+                    resolveSlideshow(); // Kích hoạt Promise để chuyển sang bước tiếp theo
+                    return;
+                }
+
+                // Tắt tất cả các slide và bật slide hiện tại
+                slides.forEach(slide => slide.classList.remove('active'));
+                slides[slideIndex].classList.add('active');
+
+                // Chuyển sang slide tiếp theo
+                slideIndex++;
+            }
+
+            // Bắt đầu trình chiếu
+            return new Promise(resolve => {
+                resolveSlideshow = resolve; 
+                showSlides(); // Hiển thị ảnh đầu tiên ngay lập tức
+                slideshowInterval = setInterval(showSlides, durationPerPhoto);
+            });
+        }
+
+        // Hiệu ứng bóng bay
+        function startBalloonAnimation() {
+            const colors = ['#f44336', '#9c27b0', '#2196f3', '#4caf50', '#ff9800'];
+            
+            for (let i = 0; i < 10; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                
+                const randomLeft = Math.random() * 80 + 10;
+                balloon.style.left = randomLeft + '%';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.background = color;
+                balloon.style.setProperty('--balloon-color', color);
+                
+                const randomDelay = Math.random() * 5; 
+                balloon.style.animationDelay = randomDelay + 's';
+                
+                balloonArea.appendChild(balloon);
+            }
+        }
+
+
+        // BẮT ĐẦU CHƯƠNG TRÌNH CHÍNH
+        function startGift(playMusic) {
+            // Ẩn câu hỏi và hiện nội dung chính
+            musicQuestion.style.display = 'none';
+            container.style.opacity = '1';
+            content.style.display = 'block';
+
+            // 1. PHÁT NHẠC & GIỚI THIỆU
+            let intro = "";
+            if (playMusic) {
+                try {
+                    music.play(); 
+                } catch (e) {
+                    console.error("Không thể phát nhạc 'chill.mp3'. Hãy kiểm tra tên file và đường dẫn.");
+                }
+                intro = "🔊 Tuyệt vời! Hãy cùng thưởng thức không gian lãng mạn với bản Nhạc Nhé...";
+            } else {
+                intro = "🤫 Không sao, sự chân thành này vẫn đủ để làm em hạnh phúc. Chào mừng em đến với bất ngờ nho nhỏ này!";
+            }
+
+            typeWriter(intro, introText, 50)
+            .then(() => {
+                typingLetter.textContent = ''; 
+                return new Promise(resolve => setTimeout(resolve, 1000));
+            })
+            // 2. GÕ THƯ TÌNH TỰ ĐỘNG
+            .then(() => typeWriter(letterContent, typingLetter, 25))
+            .then(() => {
+                return new Promise(resolve => setTimeout(resolve, 2000)); 
+            })
+            // 3. HIỆN TRÌNH CHIẾU ẢNH
+            .then(() => {
+                finalStep.textContent = "3: Xem lại những khoảnh khắc đẹp nhất của chúng ta!";
+                finalStep.style.display = 'block';
+                photoFrame.style.display = 'block';
+                
+                return startSlideshow(); // Bắt đầu trình chiếu và đợi cho đến khi xong
+            })
+            // 4. HIỆU ỨNG CUỐI: BÓNG BAY & BÁNH KEM
+            .then(() => {
+                finalStep.textContent = "4 BÓNG BAY VÀ BÁNH KEM CHÚC MỪNG!";
+                
+                // Thả bóng bay
+                startBalloonAnimation();
+
+                // Hiện bánh kem
+                cakeElement.style.display = 'block';
+                
+                // Lời nhắn cuối
+                closingMessage.style.display = 'block';
+            });
+        }
+
+        // --- SỰ KIỆN TƯƠNG TÁC (ĐÃ KHÔI PHỤC VÀ ĐẢM BẢO CHƯƠNG TRÌNH CHẠY SAU KHI CLICK) ---
+        document.getElementById('btn-yes').addEventListener('click', () => {
+            startGift(true);
+        });
+
+        document.getElementById('btn-no').addEventListener('click', () => {
+            startGift(false);
+        });
+
+    </script>
+</body>
+</html>
